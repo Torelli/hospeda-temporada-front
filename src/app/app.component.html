@@ -1,0 +1,165 @@
+<nav class="flex justify-between items-center px-4 pt-6 pb-4 border-b border-b-gray-200 drop-shadow-2xl">
+  <div>
+    <h1 class="font-bold text-2xl">Hospedaria App</h1>
+    <span class="text-xs text-slate-500">Por </span>
+    <div class="text-xs group relative inline">
+      <a class="text-indigo-600 rounded hover:text-indigo-700 active:bg-indigo-700/10 transition-all"
+        href="https://github.com/Torelli" target="_blank">Giovanni Walter
+      </a>
+      <div
+        class="opacity-0 -translate-x-1 whitespace-nowrap bg-gray-900 text-white text-center text-base rounded-lg py-2 absolute z-10 group-hover:translate-x-0 group-hover:opacity-100 -top-3 left-24 px-3 pointer-events-none transition-all">
+        Visite meu GitHub!
+        <svg class="absolute text-gray-900 h-2 -left-2 bottom-4 rotate-90" x="0px" y="0px"
+          viewBox="0 0 255 255" xml:space="preserve">
+          <polygon class="fill-current" points="0,0 127.5,127.5 255,0" />
+        </svg>
+      </div>
+    </div>
+  </div>
+  <button (click)="deleteAll()" id="theme-btn" class="group px-2 py-1 font-bold bg-slate-100 drop-shadow border border-slate-300 rounded hover:drop-shadow-md hover:bg-slate-200 transition-all">
+    <i class="fa-solid fa-arrows-rotate fa-lg group-hover:rotate-180 transition-all"></i>
+    <div
+      class="opacity-0 translate-x-1 whitespace-nowrap bg-gray-900 text-white text-center text-base rounded-lg py-2 absolute z-10 group-hover:translate-x-0 group-hover:opacity-100 -top-1 right-12 px-3 pointer-events-none transition-all">
+      <span id="theme-tooltip">Limpar banco de dados</span>
+      <svg class="absolute text-gray-900 h-2 -right-2 bottom-4 -rotate-90" x="0px" y="0px"
+        viewBox="0 0 255 255" xml:space="preserve">
+        <polygon class="fill-current" points="0,0 127.5,127.5 255,0" />
+      </svg>
+    </div>
+  </button>
+</nav>
+<div class="p-8 text-slate-700 h-screen overflow-y-auto">
+  <div>
+    <h2 class="text-3xl font-bold">Lista de reservas</h2>
+    <div class="flex items-center justify-center">
+      <button id="btn-new-reserva"
+        class="px-8 py-4 font-bold bg-slate-200 drop-shadow border rounded hover:drop-shadow-md hover:bg-slate-300 transition-all"
+        (click)="abrirModal()">Nova Reserva</button>
+    </div>
+    <div class="mt-12 flex flex-col gap-2 items-center justify-center w-full">
+      <div
+        class="text-left grid grid-cols-7 px-4 py-2 gap-2 w-full font-bold border border-slate-300 bg-slate-100 rounded">
+        <p>Id</p>
+        <p>Nome do hóspede</p>
+        <p>Data de chegada</p>
+        <p>Data de partida</p>
+        <p>Nº de hóspedes</p>
+        <p>Status</p>
+        <p>Ações</p>
+      </div>
+      <div
+        class="text-left grid grid-cols-7 px-4 py-2 gap-2 w-full font-bold border border-slate-200 rounded drop-shadow hover:drop-shadow-md hover:bg-slate-100/50 transition-all"
+        *ngFor="let reserva of reservas">
+        <div>{{reserva.id}}</div>
+        <div>{{reserva.nomeHospede}}</div>
+        <div>{{reserva.dataInicio}}</div>
+        <div>{{reserva.dataFim}}</div>
+        <div>{{reserva.quantidadePessoas}}</div>
+        <div>{{reserva.status}}</div>
+        <div class="flex flex-row gap-2">
+          <button type="button"
+            class="group px-2 py-1 font-bold bg-slate-200 drop-shadow border rounded hover:drop-shadow-md hover:bg-slate-300 transition-all"
+            onclick="dialogNewReserva.showModal()"
+            (click)="updateReserva(reserva)">
+            <i class="fa-regular fa-pen-to-square"></i>
+            <div
+              class="opacity-0 -translate-x-1 whitespace-nowrap bg-gray-900 text-white text-center text-base rounded-lg py-2 absolute z-10 group-hover:translate-x-0 group-hover:opacity-100 -top-1 left-20 px-3 pointer-events-none transition-all">
+              Editar
+            </div>
+          </button>
+          <button type="button"
+            class="group px-2 py-1 font-bold bg-slate-200 drop-shadow border rounded hover:drop-shadow-md hover:bg-slate-300 transition-all"
+            (click)="cancelReserva(reserva.id)">
+            <i class="fa-solid fa-xmark"></i>
+            <div
+              class="opacity-0 -translate-x-1 whitespace-nowrap bg-gray-900 text-white text-center text-base rounded-lg py-2 absolute z-10 group-hover:translate-x-0 group-hover:opacity-100 -top-1 left-10 px-3 pointer-events-none transition-all">
+              Cancelar
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="dialogNewReserva"
+    class="rounded-lg bg-white text-left shadow-xl sm:w-full sm:max-w-lg p-0 backdrop:bg-slate-400/50 backdrop:backdrop-blur-sm transition-all">
+    <div class="bg-slate-100 px-4 py-3 flex justify-between sm:px-6">
+      <div class="flex items-center sm:justify-around sm:gap-1">
+        <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full">
+          <i id="dialog-icon" class="fa-solid fa-circle-plus text-2xl text-slate-700"></i>
+        </div>
+        <div class="text-center sm:mt-0 sm:text-left">
+          <h3 class="text-base font-semibold leading-6" id="dialog-title">Criar nova reserva</h3>
+        </div>
+      </div>
+      <button type="button" id="btn-close-dialog" onclick="dialogNewReserva.close()" (click)="cleanForm(f)">
+        <i class="fa-regular fa-circle-xmark text-slate-400 text-xl"></i>
+      </button>
+    </div>
+    <div class="bg-white px-4 pt-5 pb-4 sm:px-6 sm:pt-0 flex flex-col items-center mt-2">
+      <form id="add-form" class="w-3/4 pt-6" (ngSubmit)="f.form.valid && saveReserva(f)" #f="ngForm" novalidate>
+        <div class="w-full relative mb-6">
+          <label for="nomeHospede">Nome do hóspede</label>
+          <input
+            class="w-full p-1 rounded bg-white border border-slate-400 mb-4 focus-visible:outline-0 focus-visible:border-slate-700"
+            type="text" [(ngModel)]="reserva.nomeHospede" id="nomeHospede" name="nomeHospede" #nomeHospede="ngModel"
+            required [ngClass]="{ 'is-invalid': f.submitted && nomeHospede.invalid }"
+            placeholder="Digite o nome do hóspede">
+          <div *ngIf="f.submitted && nomeHospede.invalid" class="text-red-500">
+            <div>Nome do hóspede é obrigatório</div>
+          </div>
+        </div>
+        <div class="w-full relative mb-6">
+          <label for="dataInicio">Data de chegada</label>
+          <input
+            class="w-full p-1 rounded bg-white border border-slate-400 mb-4 focus-visible:outline-0 focus-visible:border-slate-700 focus-visible:placeholder:invisible"
+            type="date" [(ngModel)]="reserva.dataInicio" id="dataInicio" name="dataInicio" #dataInicio="ngModel"
+            required [ngClass]="{ 'is-invalid': f.submitted && dataInicio.invalid }"
+            placeholder="Digite a data de chegada">
+          <div *ngIf="f.submitted && dataInicio.invalid" class="text-red-500">
+            <div>Data de chegada é obrigatória</div>
+          </div>
+        </div>
+        <div class="w-full relative mb-6">
+          <label for="dataFim">Data de partida</label>
+          <input
+            class="w-full p-1 rounded bg-white border border-slate-400 mb-4 focus-visible:outline-0 focus-visible:border-slate-700 focus-visible:placeholder:invisible"
+            type="date" [(ngModel)]="reserva.dataFim" id="dataFim" name="dataFim" #dataFim="ngModel" required
+            [ngClass]="{ 'is-invalid': f.submitted && dataFim.invalid }" placeholder="Digite a data de partida">
+          <div *ngIf="f.submitted && dataFim.invalid" class="text-red-500">
+            <div>Data de partida é obrigatória</div>
+          </div>
+        </div>
+        <div class="w-full relative mb-6">
+          <label for="quantidade-pessoas">Quantidade de hóspedes</label>
+          <input
+            class="w-full p-1 rounded bg-white border border-slate-400 mb-4 focus-visible:outline-0 focus-visible:border-slate-700"
+            type="number" [(ngModel)]="reserva.quantidadePessoas" id="quantidade-pessoas" name="quantidade-pessoas"
+            #quantidadePessoas="ngModel" required [ngClass]="{ 'is-invalid': f.submitted && quantidadePessoas.invalid }"
+            placeholder="Digite a quantidade de hóspedes">
+          <div *ngIf="f.submitted && quantidadePessoas.invalid" class="text-red-500">
+            <div>Quantidade de hóspedes é obrigatória</div>
+          </div>
+        </div>
+        <div id="status-container" class="w-full relative mb-6">
+          <label for="status">Status</label>
+          <select
+            class="w-full p-1 rounded bg-white border border-slate-400 mb-4 focus-visible:outline-0 focus-visible:border-slate-700 focus-visible:placeholder:invisible"
+            [(ngModel)]="reserva.status" id="status" name="status" #status="ngModel"
+            [ngClass]="{ 'is-invalid': f.submitted && status.invalid }">
+            <option value="CONFIRMADA">CONFIRMADA</option>
+            <option value="PENDENTE">PENDENTE</option>
+            <option hidden value="CANCELADA">CANCELADA</option>
+          </select>
+          <div *ngIf="f.submitted && status.invalid" class="text-red-500">
+            <div>Status é obrigatório</div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="bg-slate-100 w-full px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+      <button form="add-form" type="submit" class="inline-flex w-full justify-center rounded-md bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600 sm:ml-3 sm:w-auto">Salvar</button>
+      <button form="add-form" type="reset" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-gray-50 sm:mt-0 sm:w-auto" (click)="cleanForm(f)">Cancelar</button>
+    </div>
+  </dialog>
+</div>
