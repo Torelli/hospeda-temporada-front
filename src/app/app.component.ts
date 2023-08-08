@@ -85,11 +85,12 @@ export class AppComponent implements OnInit {
   verificaDatas() {
     const dataChegada: Date = parseISO(this.reserva.dataInicio.toString());
     const dataPartida: Date = parseISO(this.reserva.dataFim.toString());
-    const intervaloDeDatas:String|false = this.checaIntervaloDeData(dataChegada, dataPartida);
-    const datasComparadas:String|false = this.comparaDatas(dataChegada, dataPartida);
 
-    if(intervaloDeDatas) return intervaloDeDatas;    
+    const datasComparadas:String|false = this.comparaDatas(dataChegada, dataPartida);
     if(datasComparadas) return datasComparadas;
+
+    const intervaloDeDatas:String|false = this.checaIntervaloDeData(dataChegada, dataPartida);
+    if(intervaloDeDatas) return intervaloDeDatas;
 
     return false;
 
