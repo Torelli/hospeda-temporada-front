@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 #Angular cache
-.angular, /.angular/cache, .angular/cache, *.angular/cache
+.angular
+.angular/cache
